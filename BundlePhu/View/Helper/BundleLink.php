@@ -117,6 +117,13 @@ class BundlePhu_View_Helper_BundleLink extends Zend_View_Helper_HeadLink
      * @var callback
      */
     protected $_minifyCallback;
+    
+    /**
+     * Toggle, whether to bundle or not.
+     *
+     * @var bundleOn
+     */
+    protected $_bundleOn = true;
 
     public function setView(Zend_View_Interface $view) {
         $this->view = $view;
@@ -273,6 +280,18 @@ class BundlePhu_View_Helper_BundleLink extends Zend_View_Helper_HeadLink
         $this->_gzipEncoding = $encodingMode;
         return $this;
     }
+    
+    /**
+     * Turn off or on bundling
+     *
+     * @param boolean $bundle True to bundle, false otherwise.
+     * @return BundlePhu_View_Helper_BundleLink $this
+     */
+    public function setBundleOn($bundle)
+    {
+        $this->_bundleOn = (bool) $bundle;
+        return $this;
+    }
 
     /**
      * Iterates over stylesheets, concatenating, optionally minifying,
@@ -290,7 +309,7 @@ class BundlePhu_View_Helper_BundleLink extends Zend_View_Helper_HeadLink
      */
     public function toString($indent = null)
     {
-        if (isset($_REQUEST['bundle_off'])) {
+        if (false == $this->_bundleOn || isset($_REQUEST['bundle_off'])) {
             return parent::toString($indent);
         }
 
